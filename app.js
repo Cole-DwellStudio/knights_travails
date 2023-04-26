@@ -1,10 +1,10 @@
 const boardSize = 8;
 
-function buildGameBoard(boardSize) {
+function buildGameBoard(size = 8) {
   const gameBoard = [];
-  for (let i = 0; i <= size; i++) {
-    for (let j = 0; j <= size; j++) {
-      gameBoard.push([i, j]);
+  for (let i = size; i >= 1; i--) {
+    for (let j = 1; j <= size; j++) {
+      gameBoard.push([j, i]);
     }
   }
   return gameBoard;
@@ -89,6 +89,7 @@ function shortestPath(start = new Node([1, 1]), end = new Node([8, 8])) {
   console.log(`You made it in ${path.length} moves! Here's your path:`);
   console.log(start.position);
   path.forEach((node) => console.log(node));
+  return path;
 }
 
 function printTree(root) {
@@ -102,7 +103,64 @@ function printTree(root) {
   root.children.forEach((child) => printTree(child));
 }
 
+function drawBoard(gameBoard) {
+  const boardContainer = document.getElementById("board");
+  gameBoard.forEach((tile) => {
+    let tileElement = document.createElement("div");
+    // let tileButtonElement = document.createElement("button");
+    // tileButtonElement.addEventListener("click", drawShortestPath);
+    // tileElement.appendChild(tileButtonElement);
+    tileElement.addEventListener("click", drawShortestPath);
+    tileElement.classList.add("tile");
+    tileElement.dataset.x = tile[0];
+    tileElement.dataset.y = tile[1];
+    // tileElement.innerText = `${tileElement.dataset.x},${tileElement.dataset.y}`;
+    boardContainer.appendChild(tileElement);
+  });
+}
+
+let currentStart = null;
+let currentEnd = null;
+
+function drawShortestPath(e) {
+  if (currentStart == null) {
+    currentStart = new Node([
+      parseInt(e.srcElement.dataset.x),
+      parseInt(e.srcElement.dataset.y),
+    ]);
+    e.srcElement.style.backgroundImage = "url('./knight.svg')";
+    e.srcElement.style.backgroundSize = "contain";
+    e.srcElement.style.backgroundRepeat = "no-repeat";
+    e.srcElement.style.backgroundPosition = "center";
+    document.getElementById("result").innerText = "Click end tile.";
+  } else if (currentEnd == null) {
+    currentEnd = new Node([
+      parseInt(e.srcElement.dataset.x),
+      parseInt(e.srcElement.dataset.y),
+    ]);
+    e.srcElement.style.background = "green";
+    path = shortestPath(currentStart, currentEnd);
+    boardElements = Array.from(document.getElementById("board").children);
+
+    let i = 1;
+    path.forEach((node) => {
+      boardElements.forEach((child) => {
+        if (child.dataset.x == node[0] && child.dataset.y == node[1]) {
+          number = document.createElement("div");
+          number.innerText = i;
+          child.appendChild(number);
+          child.style.background = "#59A0E2";
+          ++i;
+        }
+      });
+    });
+    document.getElementById(
+      "result"
+    ).innerText = `You made it in ${path.length} moves! Here's your path:`;
+  }
+}
+
 let start = new Node([1, 1]);
 let end = new Node([6, 5]);
 
-shortestPath(start, end);
+drawBoard(buildGameBoard(8));
