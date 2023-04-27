@@ -128,7 +128,7 @@ function drawShortestPath(e) {
       parseInt(e.srcElement.dataset.x),
       parseInt(e.srcElement.dataset.y),
     ]);
-    e.srcElement.style.backgroundImage = "url('./knight.svg')";
+    e.srcElement.style.backgroundImage = "url('./Knight.svg')";
     e.srcElement.style.backgroundSize = "contain";
     e.srcElement.style.backgroundRepeat = "no-repeat";
     e.srcElement.style.backgroundPosition = "center";
