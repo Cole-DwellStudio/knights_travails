@@ -138,7 +138,6 @@ function drawShortestPath(e) {
       parseInt(e.srcElement.dataset.x),
       parseInt(e.srcElement.dataset.y),
     ]);
-    e.srcElement.style.background = "green";
     path = shortestPath(currentStart, currentEnd);
     boardElements = Array.from(document.getElementById("board").children);
 
